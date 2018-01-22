@@ -1,0 +1,66 @@
+<apex:page controller="myCampaignController" tabstyle="Campaign" sidebar="true" language="{!$CurrentPage.parameters.lang}">
+<apex:outputlabel value="{!$Label.Lang_Lable}"  > </apex:outputlabel>
+    <apex:pageblock title="User Driven Campaigns" >
+    <apex:pageblockButtons location="top">
+       <apex:outputLink value="{!URLFOR($Action.Campaign.New)}">Create New Campaign</apex:outputLink>
+    </apex:pageblockButtons>
+    
+      <apex:pageblockButtons location="bottom">    
+           <apex:outputLink value="{!URLFOR($Action.Campaign.New)}">Setup</apex:outputLink>     
+           <apex:outputLink value="{!URLFOR($Action.Campaign.New)}">Reports</apex:outputLink>
+           <apex:outputLink value="{!URLFOR($Action.Campaign.New)}">Templates</apex:outputLink>
+           <apex:outputLink value="{!URLFOR($Action.Campaign.New)}">Email Delegation</apex:outputLink>      
+     </apex:pageblockButtons>
+   
+    <!--<apex:ListViews type="Campaign" /> -->
+    <apex:form >
+    
+   <apex:panelGrid columns="2">
+   <apex:outputPanel > 
+      <apex:outputLabel value="View:"/>
+      <apex:selectList value="{!selectedValue}" size="1" multiselect="false">
+        <apex:actionSupport event="onchange" rerender="pnlCampaignRecords" action="{!onChange_viewSelect}"/>
+        <!--<apex:actionSupport event="onchange" rerender="pnlCampaignRecords"/>-->
+        <apex:selectOptions value="{!listviewoptions}"/>
+      </apex:selectList>
+   </apex:outputPanel> 
+   <apex:outputPanel > 
+       <apex:commandButton value="Go!" reRender="pnlCampaignRecords" action="{!populateCampaigns}"/>
+   </apex:outputPanel> 
+   </apex:panelGrid>
+
+
+  <apex:outputPanel id="pnlCampaignRecords"> 
+    <apex:pageBlockSection id="myCampaign">
+      <apex:dataTable value="{!campaignList}" var="objCampaign" cellpadding="4" border="1">
+      
+        <apex:column headerValue="Campaign Name" >
+            <apex:outputLink value="/{!URLFOR($Page.CM_CampaignDetails) + '/' + objCampaign.id}">
+                <apex:outputText value="{!objCampaign.name}"/>
+                <apex:param name="id" value="{!objCampaign.id}"/>
+            </apex:outputLink>
+        </apex:column>
+        <apex:column headerValue="Status">
+            <apex:outputField value="{!objCampaign.Status}"/>
+        </apex:column>
+        <apex:column headerValue="Start Date">
+            <apex:outputField value="{!objCampaign.StartDate}"/>
+        </apex:column>
+        <apex:column headerValue="Type">
+            <apex:outputField value="{!objCampaign.Type}"/>
+        </apex:column>
+        <apex:column headerValue="isActive">
+            <apex:outputField value="{!objCampaign.isActive}"/>
+        </apex:column>
+        
+        
+      </apex:dataTable>
+    </apex:pageBlockSection>
+  </apex:outputPanel>
+    
+    </apex:form>
+  </apex:pageblock>
+  
+   
+  
+</apex:page>

@@ -1,0 +1,110 @@
+<apex:page Controller="accountController" >
+
+<apex:stylesheet value="{!URLFOR($Resource.AccResources,'AccResources/css/Account.css')}"/>
+<apex:includeScript value="{!URLFOR($Resource.AccResources,'AccResources/js/Account.js')}"/>
+
+<script>
+function deleteAccount(accId)
+        {
+          if(confirm('Are you sure?')){
+           Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.accountController.deleteAccount}',
+            accId,
+            function(result, event){
+           
+                if (event.status) {
+                   alert('The account has been deleted');
+                   hitme();
+                } else if (event.type === 'exception') {
+                    document.getElementById("responseErrors").innerHTML =
+                        event.message + "<br/>\n<pre>" + event.where + "</pre>";
+                } else {
+                    document.getElementById("responseErrors").innerHTML = event.message;
+                }
+            },
+            {escape: true}
+        );
+            }
+            return false;
+        }
+</script>
+
+<apex:image url="{!$Resource.accImage}" width="50" height="50" />
+<apex:pageblock title="All Accounts" >
+
+<apex:form id="theForm">
+
+<apex:outputPanel id="pnlMessages">
+<apex:pageMessages id="responseErrors"></apex:pageMessages>
+</apex:outputPanel>
+
+ <apex:panelGrid columns="3">
+  <apex:outputPanel > 
+      <apex:outputLabel value="View:"/>
+      <apex:selectList value="{!selectedValue}" size="1" multiselect="false">
+        <apex:actionSupport event="onchange" rerender="pnlAllAccounts" action="{!populateAccounts}" />
+        <apex:selectOptions value="{!listviewoptions}"/>
+      </apex:selectList>
+   </apex:outputPanel>
+   <apex:outputPanel > 
+       <apex:commandButton value="Go!" reRender="pnlAllAccounts,accToSearch,pnlMessages" action="{!populateAccounts}"/>
+   </apex:outputPanel>
+   <apex:outputPanel > 
+       <apex:inputtext id="accToSearch" onkeypress="handleKeyPress(event)" value="{!txtToSearch}" /> 
+       <apex:actionFunction name="otherFindTerminal" action="{!searchAccounts}" rerender="pnlAllAccounts,pnlMessages"/>
+       <apex:actionfunction name="hitme" action="{!populateAccounts}" rerender="pnlAllAccounts,pnlMessages" />  
+       <apex:commandButton id="btnSearch" value="Search" onclick="return callSubmitClick();"  />
+       <apex:commandButton id="btnClear" value="Clear" rerender="pnlAllAccounts,accToSearch,pnlMessages" action="{!clearSearch}"/>
+   </apex:outputPanel>
+    </apex:panelGrid>
+   
+   <apex:repeat value="{!AlphaList}" var="a">
+        <apex:commandLink value="{!a}" action="{!BuildQuery}" status="TableUpdateStatus" styleClass="alpha-link{!if(AlphaFilter=a,' alpha-select','')}" rerender="pnlAllAccounts">
+                     <apex:param name="AlphaFilter" value="{!a}" assignTo="{!AlphaFilter}" />
+         </apex:commandLink>
+   </apex:repeat>
+   
+    <apex:actionStatus id="TableUpdateStatus">
+            <apex:inputHidden value="{!AlphaFilter}" id="hiddenField" />
+            <!-- loading message -->
+            <apex:facet name="start">
+               <apex:outputPanel layout="block" styleClass="message infoM4">
+                  <apex:panelGrid columns="2" styleClass="messageTable" columnClasses="messageCell" style="padding:0px;margin:0px;">
+                     <apex:panelGroup >
+                        <img class="loading-icon" src="/s.gif" />
+                     </apex:panelGroup>
+                     <apex:panelGroup >
+                        <div class="messageText">Please wait...</div>
+                     </apex:panelGroup>
+                  </apex:panelGrid>
+               </apex:outputPanel>
+            </apex:facet>
+   </apex:actionStatus>
+   
+   <apex:outputPanel id="pnlAllAccounts"> 
+   <apex:dataTable value="{!allAccounts}" var="acc" cellpadding="4" border="1">
+       <apex:column headerValue="Account Name">
+           <apex:outputLink target="_blank" value="{!LEFT($CurrentPage.URL,FIND('/',$CurrentPage.URL,9)) + detailsPageURL}">
+                <apex:outputText value="{!acc.Name}"/>
+                <apex:param name="id" value="{!acc.id}"/>
+           </apex:outputLink>
+       </apex:column>
+       <apex:column headerValue="Phone" value="{!acc.Phone}" />
+       <apex:column headerValue="WebSite" value="{!acc.WebSite}" />
+       <apex:column headerValue="Manage Contacts">
+          <apex:commandButton value="Manage Contacts"/>
+       </apex:column>
+       <apex:column headerValue="Delete Acc">
+          <apex:outputLink onclick="return deleteAccount('{!acc.id}');" >
+              <apex:outputText value="Delete"/>
+          </apex:outputLink>
+       </apex:column>
+       
+   </apex:dataTable>
+   </apex:outputPanel>
+   
+</apex:form>
+
+
+</apex:pageblock> 
+</apex:page>

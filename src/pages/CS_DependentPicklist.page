@@ -1,0 +1,30 @@
+<apex:page controller="CS_picklistController">
+  
+  <apex:form >
+  <apex:pageBlock >
+      <apex:pageblockSection >
+      
+      <apex:panelGrid columns="2" >
+      
+      <apex:outputPanel id="pnlCountry">
+          <apex:outputLabel value="Country: " ></apex:outputLabel>
+          
+          <apex:selectList value="{!selectedValue}" size="1" multiselect="false">
+                <apex:actionSupport event="onchange" reRender="pnlCity" action="{!onChange_viewSelect}"/>
+                <apex:selectOptions value="{!countryList}"/>
+          </apex:selectList>
+       </apex:outputPanel> 
+       
+       <apex:outputPanel id="pnlCity"> 
+          <apex:outputLabel value="City: " ></apex:outputLabel>
+          <apex:selectList size="1" multiselect="false">
+                <apex:selectOptions value="{!cityList}"/>
+          </apex:selectList>
+       </apex:outputPanel> 
+      
+      </apex:panelGrid>
+      </apex:pageblockSection>    
+      
+  </apex:pageBlock>
+  </apex:form>
+</apex:page>

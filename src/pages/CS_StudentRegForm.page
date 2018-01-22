@@ -1,0 +1,37 @@
+<apex:page standardController="Student__c" extensions="CS_regFormController" language="{!$CurrentPage.parameters.lang}">
+<apex:form >
+<apex:pagemessages id="successMsg"></apex:pagemessages>
+
+  <apex:pageBlock >
+  <apex:pageblockButtons location="bottom">
+              <apex:commandButton value="Submit" rerender="studentForm,successMsg" action="{!submitForm}"/>
+   </apex:pageblockButtons>
+   
+   <apex:selectList value="{!selectedValue}" size="1" multiselect="false">
+                <apex:actionSupport event="onchange" action="{!onChange_langSelect}"/>
+                <apex:selectOptions value="{!langList}"/>
+   </apex:selectList>
+   
+      <apex:pageblockSection id="studentForm">
+          <apex:panelGrid Columns="2" >
+              <apex:outputPanel >
+                  <apex:outputLabel value="Student Name:"></apex:outputLabel>
+                  <apex:inputField value="{!Student__c.Name}"/>
+                  
+                  <apex:outputLabel value="Gender:"></apex:outputLabel>
+                  <apex:inputField value="{!Student__c.Gender__c}"/>
+              
+                  <apex:outputLabel value="Roll Number:"></apex:outputLabel>
+                  <apex:inputField value="{!Student__c.Roll_Number__c}"/>
+                  
+                  <apex:outputlabel value="{!$Label.Lang_Lable}"  > </apex:outputlabel>
+              </apex:outputPanel>
+          
+          </apex:panelGrid>     
+      </apex:pageblockSection>
+      
+  </apex:pageBlock>
+</apex:form>
+
+  
+</apex:page>

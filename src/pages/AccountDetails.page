@@ -1,0 +1,6 @@
+<apex:page StandardController="Account">
+  <apex:pageBlock title="Account Details">
+      <apex:detail subject="{!Account.id}"/>
+        
+  </apex:pageBlock>
+</apex:page>

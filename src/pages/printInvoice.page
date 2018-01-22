@@ -1,0 +1,118 @@
+<apex:page StandardController="Invoice_Statement__c"  extensions="printInvoiceController" renderAs="pdf" applyHtmlTag="false" showheader="false"  >
+<head>
+<style>
+body{
+<!--font-size:72px; -->
+} 
+.headerCSS{
+        text-align:center;
+        background-color : #CEE0F3 ;
+    }
+.footerCSS{
+        <!--font-weight: bold;-->
+        width:20% !important;
+        
+}
+.nextfooterCSS{
+        <!--font-weight: bold;-->
+        width:80% !important;
+        
+}
+.tableCSS{
+        text-align:center;
+    } 
+.billTOCSS{
+        border:1px solid black;    
+        background-color : #CEE0F3 ;
+        font-size : 11pt;
+        width:100% !important;
+    } 
+.titleCSS{
+        font-size:16pt;
+        font-weight: bold;
+}
+.invoiceCSS{
+        font-size:20pt;
+        font-weight: 
+        bold;color:#5CA2E8;
+        align:right !important;
+        text-align:right !important;
+}
+</style>
+<script>
+
+</script>
+</head>
+
+<apex:pageBlock >
+<apex:pageblockSection columns="2">
+
+<apex:pageblockSectionItem dataStyle="width: 45%;">
+      <apex:pageblock >
+              <apex:outputLabel styleClass="titleCSS">{!$Organization.Name}</apex:outputLabel><br/>
+              <apex:outputLabel >{!$Organization.Street}</apex:outputLabel><br/>
+              <apex:outputLabel >{!$Organization.City},{!$Organization.State} {!$Organization.PostalCode}</apex:outputLabel><br/>
+              <apex:outputLabel >Phone:{!$Organization.Phone}</apex:outputLabel>
+            
+      </apex:pageblock>
+</apex:pageblockSectionItem>
+
+<apex:pageblockSectionItem dataStyle="width: 55%;">
+      <apex:pageblock >
+           <apex:outputPanel >
+           <br/>
+             <apex:outputLabel styleClass="invoiceCSS">INVOICE</apex:outputLabel><br/><br/>
+            <apex:dataTable value="{!Invoice_Statement__c}" var="invoice" border="1" align="right"  styleClass="tableCSS" headerClass="headerCSS" width="325px">
+            <apex:column >
+                <apex:facet name="header">Invoice #</apex:facet>
+                <apex:outputText >{!invoice.Name}</apex:outputText>
+            </apex:column>       
+            <apex:column >
+                <apex:facet name="header">Date</apex:facet>
+                <apex:outputText >{!invoice.Name}</apex:outputText>
+            </apex:column>              
+          </apex:dataTable>   
+          </apex:outputPanel>
+      </apex:pageblock>
+</apex:pageblockSectionItem>
+
+</apex:pageblockSection>
+</apex:pageBlock>
+
+<br/><br/><br/>
+
+<apex:pageBlock >
+    <apex:outputLabel styleClass="billTOCSS">BILL TO</apex:outputLabel><br/>
+    <apex:outputLabel >{!Invoice_Statement__c.Account__r.Owner.Name}</apex:outputLabel><br/>
+    <apex:outputLabel >{!Invoice_Statement__c.Account__r.Name}</apex:outputLabel><br/>
+    <apex:outputLabel >{!Invoice_Statement__c.Account__r.Street__c}</apex:outputLabel><br/>
+    <apex:outputLabel >{!Invoice_Statement__c.Account__r.City__c},{!Invoice_Statement__c.Account__r.State__c} {!Invoice_Statement__c.Account__r.Post_Code__c}</apex:outputLabel><br/>
+    <apex:outputLabel >{!Invoice_Statement__c.Account__r.Phone}</apex:outputLabel><br/>
+    <apex:outputLabel >{!Invoice_Statement__c.Account__r.Email__c}</apex:outputLabel><br/>
+</apex:pageBlock>
+
+
+<apex:pageBlock title="Line Items" >
+
+   <apex:dataTable value="{!lineItems}" var="items" border="1"  styleClass="tableCSS" headerClass="headerCSS" width="600px">
+            <apex:column footerClass="footerCSS" width="80%" >
+                <apex:facet name="header">Description</apex:facet>
+                <apex:outputText >{!items.Description__c}</apex:outputText>
+                <apex:facet name="footer"> Thank you for your purchase!  </apex:facet>
+                
+            </apex:column>       
+            <apex:column footerClass="nextfooterCSS" width="20%">
+                <apex:facet name="header">Amount</apex:facet>
+                <apex:outputText >{!items.Amount__c}</apex:outputText>
+                <apex:facet name="footer"> <strong> Total:${!grandTotal} </strong>  </apex:facet>
+            </apex:column> 
+   
+        </apex:dataTable> 
+</apex:pageBlock>
+<br/><br/>
+<apex:pageblock >
+<apex:outputLabel >If you have any quetions about this invoice, please contact</apex:outputLabel><br/>
+<apex:outputLabel >{!$User.FirstName} {!$User.LastName},{!$User.MobilePhone},{!$User.Email}</apex:outputLabel>
+</apex:pageblock> 
+
+</apex:page>

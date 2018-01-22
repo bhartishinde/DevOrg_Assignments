@@ -1,0 +1,20 @@
+<apex:page StandardController="Campaign">
+
+
+<apex:form >
+<apex:pageBlock mode="edit">
+<apex:pageblockButtons location="top">
+       <apex:commandButton value="Save" action="{!Save}" />
+       <apex:commandButton value="Cancel" action="{!Cancel}" />
+       
+  </apex:pageblockButtons>
+ 
+                <apex:inputField label="Campaign Name" value="{!Campaign.Name}" />
+                <apex:inputField label="Active" value="{!Campaign.isActive}" />
+                <apex:inputField label="Start Date"  value="{!Campaign.StartDate}" />
+  </apex:pageBlock>
+  </apex:form>
+ 
+
+    
+</apex:page>

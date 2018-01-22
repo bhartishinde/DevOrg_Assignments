@@ -1,0 +1,19 @@
+<apex:page standardController="Campaign">
+<apex:form >
+  <apex:pageBlock mode="view">
+  
+  <apex:pageblockButtons location="top">
+       <apex:commandButton value="Edit" action="{!URLFOR($Action.Campaign.Edit,Campaign.Id)}" />
+       <!--<apex:commandButton value="Delete" action="{!URLFOR($Action.Campaign.Delete,Campaign.Id)}" />-->
+       <apex:commandButton value="Delete" onclick="return confirm('Are you sure?')" action="{!URLFOR($Action.Campaign.Delete,Campaign.Id)}" />
+  </apex:pageblockButtons>
+   
+                <apex:outputField label="Campaign Name" value="{!Campaign.Name}" />
+                <apex:outputField label="Active" value="{!Campaign.isActive}" />
+                <apex:outputField label="Start Date"  value="{!Campaign.StartDate}" />
+    
+   
+   </apex:pageBlock> 
+</apex:form> 
+ 
+</apex:page>
